@@ -1214,7 +1214,7 @@ footer a:hover { color: var(--color-primary); }
     <li><a href="#permission">权限模型</a></li>
     <li><a href="#milestones">版本历程</a></li>
   </ul>
-  <span class="nav-version">v1.22.0</span>
+  <span class="nav-version">v1.23.0</span>
 </nav>
 
 <!-- Hero (Operator Console 风格) -->
@@ -1795,10 +1795,16 @@ footer a:hover { color: var(--color-primary); }
   <div class="section-header reveal">
     <div class="section-label">版本历程</div>
     <h2 class="section-title">持续迭代 · 精益求精</h2>
-    <p class="section-desc">从 v1.13.0 到 v1.22.x，每一次发布都离「好用的会议管理工具」更近一步。</p>
+    <p class="section-desc">从 v1.13.0 到 v1.23.x，每一次发布都离「好用的会议管理工具」更近一步。</p>
   </div>
 
   <div class="milestone-timeline reveal">
+    <!-- v1.23.0 补全：移动端适配方案 A + 关于页对所有用户开放 -->
+    <div class="milestone-item">
+      <div class="milestone-version">v1.23.0</div>
+      <h4>移动端适配方案 A（底部 Tab 栏 + 「更多」聚合页）</h4>
+      <p>用户要求检查项目对手机、平板等终端的使用适配情况。审查发现手机端存在阻断性缺陷（侧边栏直接 display:none 无替代导航、无 touch 优化、无 iPhone 安全区适配）。选定方案 A：5 个底部 Tab（工作台/会议/待办/上传或时间轴/更多）+ 「更多」聚合页承载低频功能。新增 MobileTabBar.vue + MoreView.vue / AppLayout 改造 / 路由 /more / 全局 touch 优化（tap-highlight + touch-action 去除 300ms 延迟） / index.html viewport-fit=cover / 五处版本号同步 v1.22.0→v1.23.0。移动端为纯增量改动，桌面端零变化。</p>
+    </div>
     <!-- v1.22.x 补全：v1.21.0 ASR 主推 + v1.21.5~v1.22.0 关键修复 -->
     <div class="milestone-item">
       <div class="milestone-version">v1.22.x</div>
