@@ -1214,7 +1214,7 @@ footer a:hover { color: var(--color-primary); }
     <li><a href="#permission">权限模型</a></li>
     <li><a href="#milestones">版本历程</a></li>
   </ul>
-  <span class="nav-version">v1.23.0</span>
+  <span class="nav-version">v1.25.0</span>
 </nav>
 
 <!-- Hero (Operator Console 风格) -->
@@ -1531,7 +1531,7 @@ footer a:hover { color: var(--color-primary); }
         </svg>
       </div>
       <h3>音频转写 ⭐</h3>
-      <p>上传会议录音，自动调用 ASR 网关转写为结构化文本（说话人 / 时间轴 / 段落），转写结果可手动编辑后直接进入 LLM 编译流。3 个预置 ASR 引擎（FunASR / SenseVoice / Qwen3-ASR），分片上传 5 路并发 + 3 次指数退避，4GB 大文件稳定传输。</p>
+      <p>上传会议录音，自动调用 ASR 网关转写为结构化文本（说话人 / 时间轴 / 段落），转写结果可手动编辑后直接进入 LLM 编译流。3 个预置 ASR 引擎（FunASR / SenseVoice / Qwen3-ASR），分片上传 5 路并发 + 3 次指数退避 + Redis 多 worker 共享存储，4GB 大文件稳定传输。原生支持 WAV / MP3 / M4A / FLAC / OGG / AAC / AMR 等格式（含手机端原生录音 AMR）。</p>
       <div class="feature-tags">
         <span class="feature-tag highlight">自动转写</span>
         <span class="feature-tag highlight">说话人分离</span>
@@ -1784,7 +1784,7 @@ footer a:hover { color: var(--color-primary); }
       </div>
       <div class="feature-detail-content">
         <h4>音频转写</h4>
-        <p>音频文件自动转写为结构化文本：说话人分离 + 时间轴分段 + 段落文本。转写结果写入 Markdown 原文，复用现有 LLM 编译流（决策 / 待办 / 摘要）。支持 FunASR / SenseVoice / Qwen3-ASR 三引擎，分片上传 5 路并发 + 3 次指数退避，4GB 大文件稳定传输。</p>
+        <p>音频文件自动转写为结构化文本：说话人分离 + 时间轴分段 + 段落文本。转写结果写入 Markdown 原文，复用现有 LLM 编译流（决策 / 待办 / 摘要）。支持 FunASR / SenseVoice / Qwen3-ASR 三引擎，分片上传 5 路并发 + 3 次指数退避 + Redis 多 worker 共享存储，4GB 大文件稳定传输。原生支持 WAV / MP3 / M4A / FLAC / OGG / AAC / AMR 等格式（含手机端原生录音 AMR）。</p>
       </div>
     </div>
   </div>
@@ -1795,10 +1795,22 @@ footer a:hover { color: var(--color-primary); }
   <div class="section-header reveal">
     <div class="section-label">版本历程</div>
     <h2 class="section-title">持续迭代 · 精益求精</h2>
-    <p class="section-desc">从 v1.13.0 到 v1.23.x，每一次发布都离「好用的会议管理工具」更近一步。</p>
+    <p class="section-desc">从 v1.13.0 到 v1.25.x，每一次发布都离「好用的会议管理工具」更近一步。</p>
   </div>
 
   <div class="milestone-timeline reveal">
+    <!-- v1.25.0 新增：稳定版本发布（上线测试后发布的稳定版本 Stable Release） -->
+    <div class="milestone-item">
+      <div class="milestone-version">v1.25.0</div>
+      <h4>稳定版本发布（🚀 上线测试后发布的稳定版本 Stable Release）</h4>
+      <p>v1.24.2 上线测试验证通过后正式发布的首个对外稳定版，标记稳定发布里程碑。本版本不引入新功能代码改动，仅统一同步版本号字段至 v1.25.0（按项目硬约束「版本号五处同步规则」：CHANGELOG / README / package.json / app.py / AboutSystemView）。承接 v1.22.0 ~ v1.24.2 累积能力——关于系统页开放 + 移动端适配 + 音频分片 Redis 化 + 手机端退出登录 + AMR 支持。多终端（桌面 / 平板 / 手机 &lt;860px）兼容性回归通过、多租户权限隔离（ABAC 四维鉴权）回归通过、备份/恢复链路（含公司隔离）回归通过、音频转写（ASR）端到端链路回归通过。</p>
+    </div>
+    <!-- v1.24.2 新增：上线测试期修复 -->
+    <div class="milestone-item">
+      <div class="milestone-version">v1.24.2</div>
+      <h4>音频分片上传 Redis 化 + 手机端退出登录 + AMR 格式支持</h4>
+      <p>本地测试未覆盖多 worker 部署与手机端原生场景，上线测试期间暴露三大问题并修复：① <strong>音频分片上传改用 Redis 共享存储</strong>（替代原内存 dict UploadSession），解决 gunicorn 多 worker 部署时 init / chunk / complete 三阶段可能落在不同 worker 上、分片状态进程内不共享导致 complete 阶段找不到分片、上传失败的问题；未配置 redis:// 时降级到内存 dict 兼容单 worker dev 模式。② <strong>手机端「更多」聚合页补「退出登录」入口</strong>（MoreView.vue 新增危险色卡片），修复 v1.23.0 移动端适配遗漏退出登录入口、手机用户必须清除 cookie 才能登出的体验缺陷。③ <strong>AMR 音频格式支持</strong>：后端扩展名白名单加 amr + 音频流 MIME 推断补 audio/amr + 前端上传区格式提示文案补 AMR，覆盖手机端原生录音默认格式（Android 通话录音 / 部分 iOS 录音 App）。<strong>教训</strong>：进程内状态（UploadSession / 限流器 / EventBus 等）多 worker 部署时全部失效必须用 Redis 替代；移动端适配需对照桌面端功能清单做完整回归；音频格式白名单需把移动端原生录音格式（AMR / AWB / 3GP）作为基线纳入。</p>
+    </div>
     <!-- v1.23.0 补全：移动端适配方案 A + 关于页对所有用户开放 -->
     <div class="milestone-item">
       <div class="milestone-version">v1.23.0</div>

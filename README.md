@@ -71,8 +71,8 @@ deploy/
 6. **可视化备份管理**：定时备份、多目标存储和恢复；
 7. **Word 文档导出**：单会议、决策清单和待办清单导出；
 8. **LLM 供应商管理**：预置供应商与 OpenAI 兼容自定义接口；
-9. **音频转写**：ASR 网关、说话人分离、时间轴分段和 LLM 编译衔接；
-10. **移动端适配**：底部 5 Tab 栏 + 「更多」聚合页 + iPhone 安全区适配。
+9. **音频转写**：ASR 网关、说话人分离、时间轴分段和 LLM 编译衔接；分片上传 Redis 多 worker 共享存储；原生支持 WAV / MP3 / M4A / FLAC / OGG / AAC / AMR（含手机端原生录音 AMR）；
+10. **移动端适配**：底部 5 Tab 栏 + 「更多」聚合页（含退出登录入口） + iPhone 安全区适配。
 
 ### 4.3 系统架构
 
@@ -101,8 +101,8 @@ LLM 推理供应商
 - PostgreSQL 15+；
 - Nginx、Gunicorn；
 - OpenAI SDK 兼容模式；
-- ASR 网关和五路分片上传机制；
-- 移动端：底部 Tab 栏（MobileTabBar）+ 「更多」聚合页 + iPhone 安全区适配（viewport-fit=cover + env(safe-area-inset-*)）。
+- ASR 网关和五路分片上传机制（Redis 多 worker 共享存储，原生支持 WAV/MP3/M4A/FLAC/OGG/AAC/AMR）；
+- 移动端：底部 Tab 栏（MobileTabBar）+ 「更多」聚合页（含退出登录入口） + iPhone 安全区适配（viewport-fit=cover + env(safe-area-inset-*)）。
 
 ### 4.5 权限模型
 
@@ -132,7 +132,9 @@ LLM 推理供应商
 - v1.20.x：备份稳定性与上线前安全治理；
 - v1.21.x：音频转写（ASR）集成、任务队列权限与分页、状态体验优化；
 - v1.22.0：关于系统页面对所有用户开放 + 产品官网链接；
-- v1.23.0：移动端适配方案 A（底部 Tab 栏 + 「更多」聚合页）+ iPhone 安全区适配。
+- v1.23.0：移动端适配方案 A（底部 Tab 栏 + 「更多」聚合页）+ iPhone 安全区适配；
+- v1.24.2：上线测试期修复——音频分片上传 Redis 化（多 worker 切换丢失修复）+ 手机端「更多」聚合页补退出登录入口 + AMR 音频格式支持；
+- v1.25.0：🚀 稳定版本发布（上线测试后发布的稳定版本 Stable Release），统一同步版本号至 v1.25.0，承接 v1.22.0 ~ v1.24.2 累积能力。
 
 版本历程是产品叙事内容。新增主系统版本时，应同步检查此处的版本号、功能描述和宣传口径。
 
@@ -379,7 +381,7 @@ npx serve .
 当前页面版本号位于导航栏：
 
 ```html
-<span class="nav-version">v1.23.0</span>
+<span class="nav-version">v1.25.0</span>
 ```
 
 新增版本发布时，应同时检查：
