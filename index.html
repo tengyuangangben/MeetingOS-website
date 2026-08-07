@@ -1,0 +1,2141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MeetingOS — 企业级会议纪要智能管理平台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+/* ============================================
+   文件名: index.html
+   作 者: AI自动生成
+   创建时间: 2026-08-05
+   功能描述: MeetingOS 产品宣发站点
+   作用域: 全局通用
+   依赖关系: ECharts 5.5.0（CDN 加载）
+   ============================================ */
+
+:root {
+  --color-bg: #0b1120;
+  --color-bg-alt: #0f172a;
+  --color-bg-card: #131c31;
+  --color-bg-elevated: #1a2744;
+  --color-primary: #2dd4bf;
+  --color-primary-dim: #14b8a6;
+  --color-primary-glow: rgba(45, 212, 191, 0.15);
+  --color-accent: #f59e0b;
+  --color-accent-glow: rgba(245, 158, 11, 0.12);
+  --color-violet: #a78bfa;
+  --color-text: #e2e8f0;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-border: #1e293b;
+  --color-border-light: #334155;
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+  --font-display: 'Montserrat', 'Noto Sans SC', sans-serif;
+  --font-body: 'Noto Sans SC', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ---- Noise Texture ---- */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* ---- Grid Background ---- */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(45, 212, 191, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45, 212, 191, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+/* ---- Navigation ---- */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 0 40px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(11, 17, 32, 0.8);
+  backdrop-filter: blur(20px) saturate(1.5);
+  border-bottom: 1px solid var(--color-border);
+  transition: border-color 0.3s;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.nav-brand svg { width: 28px; height: 28px; }
+
+.nav-brand span { color: var(--color-primary); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-primary);
+  transition: width 0.3s var(--ease-out);
+}
+
+.nav-links a:hover { color: var(--color-text); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-version {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-text-muted);
+  padding: 4px 12px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 100px;
+}
+
+/* ---- Hero (Operator Console 风格) ---- */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  padding: 100px 0 0 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-glow {
+  position: absolute;
+  top: 20%;
+  left: 30%;
+  width: 700px;
+  height: 500px;
+  background: radial-gradient(ellipse at center, var(--color-primary-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-left {
+  position: relative;
+  padding: 56px 64px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  border-right: 1px solid var(--color-border);
+  background-color: rgba(7, 9, 15, 0.4);
+  overflow: hidden;
+  /* v1.20.4 同步登录页：声明 color-scheme，让任何原生控件跟随主题 */
+  color-scheme: dark;
+}
+
+/* ============ v1.20.4：左侧巨型渐变 M 水印（同步登录页 v1.20.2） ============
+   设计逻辑：
+     - 字号 540px + italic + extrabold，制造"封面大字"视觉重量
+     - 三色渐变（primary → violet → primary），首尾呼应
+     - opacity 0.22 让渐变真的"显形"（不是隐式水印）
+     - 8s 浮动 + 鼠标视差（mousemove 时 JS 接管 transform）
+     - 与右侧 O 同心圆光晕形成 M ↔ O 视觉对仗
+   溢出右下角冲出版心，与登录页一致 */
+.hero-watermark {
+  position: absolute;
+  right: -40px;
+  bottom: -80px;
+  font-family: var(--font-display);
+  font-size: 540px;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 0.8;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-violet) 50%,
+    var(--color-primary) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  opacity: 0.22;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: -0.02em;
+  animation: watermark-float 8s ease-in-out infinite;
+  will-change: transform;
+  z-index: 1;
+  transition: opacity 0.4s var(--ease-out);
+}
+
+.hero-left:hover .hero-watermark {
+  animation-play-state: paused;
+  opacity: 0.28;
+}
+
+@keyframes watermark-float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-6px, -10px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-watermark { animation: none; }
+}
+
+/* ============ v1.20.4：装饰性刻度条（呼应登录页 hero-axis） ============ */
+.hero-axis {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  margin-top: auto;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-axis-mark { white-space: nowrap; user-select: none; }
+
+.hero-axis-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    var(--color-border-light),
+    transparent 30%,
+    transparent 70%,
+    var(--color-border-light)
+  );
+}
+
+.hero-left::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -20%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--color-primary-glow), transparent 70%);
+  border-radius: 50%;
+  filter: blur(60px);
+  /* v1.20.4：从 0.4 降到 0.25，让 M 水印成为主视觉，避免光晕互相打架 */
+  opacity: 0.25;
+  pointer-events: none;
+  animation: aurora-drift 12s ease-in-out infinite;
+}
+
+.hero-left::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.15), transparent 70%);
+  border-radius: 50%;
+  filter: blur(50px);
+  /* v1.20.4：从 0.3 降到 0.18，与 ::before 配合让位给 M 水印 */
+  opacity: 0.18;
+  pointer-events: none;
+  animation: aurora-drift 15s ease-in-out infinite reverse;
+}
+
+@keyframes aurora-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(20px, -20px) scale(1.1); }
+  66% { transform: translate(-15px, 15px) scale(0.95); }
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  animation: fadeInUp 0.8s var(--ease-out) both;
+}
+
+.hero-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--color-primary);
+  font-weight: 600;
+  padding: 4px 10px;
+  border: 1px solid var(--color-primary-dim);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-glow);
+}
+
+.hero-tag--muted {
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+  background: transparent;
+}
+
+.hero-mark {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInUp 0.8s var(--ease-out) both;
+}
+
+.hero-mark-glow {
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(circle, var(--color-primary-glow), transparent 70%);
+  border-radius: 50%;
+  filter: blur(20px);
+  opacity: 0.6;
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+.hero-mark-ring {
+  position: absolute;
+  inset: -8px;
+  border: 1px solid var(--color-primary-dim);
+  border-radius: var(--radius-md);
+  opacity: 0;
+  animation: ring-expand 3s ease-out infinite;
+}
+
+.hero-mark-ring--delay {
+  animation-delay: 1.5s;
+}
+
+.hero-mark-svg {
+  position: relative;
+  z-index: 2;
+  color: var(--color-primary);
+  animation: logo-float 4s ease-in-out infinite;
+}
+
+@keyframes logo-float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-4px) scale(1.02); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.1); }
+}
+
+@keyframes ring-expand {
+  0% { opacity: 0.6; transform: scale(0.9); }
+  100% { opacity: 0; transform: scale(1.3); }
+}
+
+.hero-headline {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  animation: fadeInUp 0.8s var(--ease-out) 0.1s both;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 800;
+  color: var(--color-text);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.hero-title-em {
+  background: linear-gradient(135deg, var(--color-primary), #a78bfa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-style: italic;
+}
+
+.hero-subtitle {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  max-width: 440px;
+}
+
+.hero-subtitle strong {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* Hero 右侧：feat 列表 */
+.hero-right {
+  position: relative;
+  padding: 80px 64px 80px 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 32px;
+  animation: fadeInUp 0.8s var(--ease-out) 0.2s both;
+  /* v1.20.4 同步登录页 v1.20.2：右侧加双层径向渐变底色
+     与左侧 M 渐变水印形成视觉对仗 */
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 50% 50%,
+      var(--color-primary-glow) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 60% 40% at 80% 20%,
+      rgba(167, 139, 250, 0.14) 0%,
+      transparent 50%
+    );
+  overflow: hidden;
+}
+
+/* ============ v1.20.4：右侧 O 渐变光晕（同步登录页 v1.20.2） ============
+   视觉对仗：左侧 M 巨型渐变文字 ↔ 右侧 O 同心圆光晕
+   设计逻辑：
+     - 同心圆 4 层（core + ring-1/2/3）模拟 O 的笔触
+     - 错开呼吸动画（4s/6s/8s）让光晕"活"起来
+     - 颜色：center 主色 → 中圈紫色 → 外圈透明
+     - 极低 opacity + 大 blur，形成"夜空星云"感 */
+.orbit-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 720px;
+  height: 720px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.orbit-glow-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    var(--color-primary) 0%,
+    var(--color-violet) 60%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  opacity: 0.10;
+  filter: blur(40px);
+  animation: orbit-core-breathe 6s ease-in-out infinite;
+}
+
+@keyframes orbit-core-breathe {
+  0%, 100% { opacity: 0.10; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.18; transform: translate(-50%, -50%) scale(1.08); }
+}
+
+.orbit-glow-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: 1px solid var(--color-primary);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+
+.orbit-glow-ring--1 {
+  width: 280px;
+  height: 280px;
+  opacity: 0.15;
+  border-color: var(--color-primary);
+  animation: orbit-ring-rotate 20s linear infinite, orbit-ring-pulse 4s ease-in-out infinite;
+}
+
+.orbit-glow-ring--2 {
+  width: 440px;
+  height: 440px;
+  opacity: 0.10;
+  border-color: var(--color-violet);
+  border-style: dashed;
+  animation: orbit-ring-rotate 30s linear infinite reverse, orbit-ring-pulse 6s ease-in-out infinite;
+}
+
+.orbit-glow-ring--3 {
+  width: 640px;
+  height: 640px;
+  opacity: 0.06;
+  border-color: var(--color-primary);
+  animation: orbit-ring-rotate 40s linear infinite, orbit-ring-pulse 8s ease-in-out infinite;
+}
+
+@keyframes orbit-ring-rotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes orbit-ring-pulse {
+  0%, 100% { opacity: 0.06; }
+  50% { opacity: 0.12; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-glow-core,
+  .orbit-glow-ring { animation: none; }
+}
+
+/* v1.20.4：右侧 feat 列表浮在 O 光晕之上 */
+.hero-section-label,
+.hero-right .feat {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-section-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--color-border-light), transparent);
+}
+
+.feat {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 18px 0;
+  border-top: 1px solid var(--color-border);
+  opacity: 0;
+  animation: feat-reveal 0.6s var(--ease-out) forwards;
+}
+
+.feat:nth-child(2) { animation-delay: 0.2s; }
+.feat:nth-child(3) { animation-delay: 0.35s; }
+.feat:nth-child(4) { animation-delay: 0.5s; }
+.feat:nth-child(5) { animation-delay: 0.65s; }
+.feat:nth-child(6) { animation-delay: 0.8s; }
+
+.feat:last-child {
+  border-bottom: 1px solid var(--color-border);
+}
+
+@keyframes feat-reveal {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.feat-index {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-primary);
+  padding-top: 2px;
+  min-width: 32px;
+}
+
+.feat-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.feat-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.feat-desc {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.hero-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--color-success);
+  font-weight: 600;
+  margin-top: 24px;
+  animation: fadeInUp 0.8s var(--ease-out) 0.6s both;
+}
+
+.hero-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-success);
+  box-shadow: 0 0 12px var(--color-success);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: 100px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s var(--ease-out);
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #0b1120;
+  box-shadow: 0 0 30px var(--color-primary-glow);
+}
+
+.btn-primary:hover {
+  background: #5eead4;
+  transform: translateY(-2px);
+  box-shadow: 0 0 50px var(--color-primary-glow);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border-light);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Section ---- */
+.section {
+  padding: 100px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.section-label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 44px);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.section-desc {
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ---- Features ---- */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+.feature-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 32px;
+  transition: all 0.4s var(--ease-out);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.feature-card:hover {
+  border-color: var(--color-border-light);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.feature-card:hover::before { opacity: 1; }
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: var(--color-primary);
+}
+
+.feature-card h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.feature-card p {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.feature-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.feature-tag {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  background: var(--color-bg-elevated);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  font-family: var(--font-mono);
+}
+
+.feature-tag.highlight {
+  color: var(--color-primary);
+  border-color: var(--color-primary-dim);
+  background: var(--color-primary-glow);
+}
+
+/* ---- Architecture ---- */
+.arch-container {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.arch-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+  opacity: 0.4;
+}
+
+#archChart {
+  width: 100%;
+  height: 760px;
+}
+
+/* ---- Tech Stack ---- */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.tech-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s var(--ease-out);
+}
+
+.tech-card:hover {
+  border-color: var(--color-border-light);
+  transform: translateY(-2px);
+}
+
+.tech-card .tech-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.tech-card .tech-cat {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.tech-card .tech-ver {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-primary-dim);
+  margin-top: 6px;
+}
+
+/* ---- Permission ---- */
+.permission-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.permission-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.permission-table th {
+  background: var(--color-bg-elevated);
+  padding: 14px 20px;
+  text-align: left;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.permission-table td {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.permission-table tr:last-child td { border-bottom: none; }
+
+.permission-table .role-label {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.permission-table .perm-yes { color: var(--color-success); }
+.permission-table .perm-no { color: var(--color-text-muted); }
+.permission-table .perm-cond { color: var(--color-accent); }
+
+/* ---- Stats ---- */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px;
+  margin-bottom: 64px;
+}
+
+.stat-card {
+  text-align: center;
+  padding: 32px 20px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* ---- Feature Detail ---- */
+.feature-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.feature-detail-item {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: all 0.3s var(--ease-out);
+}
+
+.feature-detail-item:hover {
+  border-color: var(--color-border-light);
+  transform: translateY(-2px);
+}
+
+.feature-detail-icon {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+}
+
+.feature-detail-content h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.feature-detail-content p {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* ---- CTA ---- */
+.cta-section {
+  text-align: center;
+  padding: 100px 40px;
+  position: relative;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, var(--color-primary-glow) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.cta-section h2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 800;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.cta-section p {
+  color: var(--color-text-secondary);
+  max-width: 500px;
+  margin: 0 auto 32px;
+  font-size: 16px;
+  position: relative;
+}
+
+.cta-section .btn {
+  position: relative;
+}
+
+/* ---- Footer ---- */
+footer {
+  border-top: 1px solid var(--color-border);
+  padding: 32px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+footer p {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+footer a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+
+footer a:hover { color: var(--color-primary); }
+
+/* ---- Responsive ---- */
+@media (max-width: 1024px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding-top: 80px;
+  }
+  .hero-left {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    padding: 40px 32px;
+    gap: 28px;
+  }
+  .hero-right {
+    padding: 40px 32px;
+  }
+  .nav-links { display: none; }
+  /* v1.20.4：窄屏 M 水印缩小避免溢出过多 */
+  .hero-watermark {
+    font-size: 320px;
+    right: -20px;
+    bottom: -60px;
+    opacity: 0.16;
+  }
+  /* v1.20.4：窄屏 O 光晕同步缩小 */
+  .orbit-glow { width: 520px; height: 520px; }
+  .orbit-glow-core { width: 160px; height: 160px; }
+  .orbit-glow-ring--1 { width: 220px; height: 220px; }
+  .orbit-glow-ring--2 { width: 360px; height: 360px; }
+  .orbit-glow-ring--3 { width: 500px; height: 500px; }
+}
+
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .hero { padding-top: 70px; }
+  .hero-left { padding: 32px 20px; gap: 24px; }
+  .hero-right { padding: 32px 20px; }
+  .section { padding: 60px 20px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .arch-container { padding: 8px; }
+  #archChart { height: 640px; }
+  .cta-section { padding: 60px 20px; }
+  footer { padding: 24px 20px; flex-direction: column; text-align: center; }
+}
+
+/* ---- Scroll Reveal ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s var(--ease-out);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---- Milestones ---- */
+.milestone-timeline {
+  position: relative;
+  padding-left: 32px;
+}
+
+.milestone-timeline::before {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--color-primary), var(--color-accent), transparent);
+}
+
+.milestone-item {
+  position: relative;
+  padding-bottom: 32px;
+}
+
+.milestone-item::before {
+  content: '';
+  position: absolute;
+  left: -26px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: 3px solid var(--color-bg);
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+.milestone-item:last-child { padding-bottom: 0; }
+
+.milestone-version {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.milestone-item h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.milestone-item p {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-border-light); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<!-- Navigation -->
+<nav>
+  <a href="#" class="nav-brand">
+    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="4" width="24" height="20" rx="4" stroke="currentColor" stroke-width="2" fill="none"/>
+      <path d="M9 12h10M9 16h7M14 8h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="8" cy="8" r="1.5" fill="var(--color-primary)"/>
+    </svg>
+    Meeting<span>OS</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">功能特性</a></li>
+    <li><a href="#architecture">架构</a></li>
+    <li><a href="#tech">技术栈</a></li>
+    <li><a href="#permission">权限模型</a></li>
+    <li><a href="#milestones">版本历程</a></li>
+  </ul>
+  <span class="nav-version">v1.21.12</span>
+</nav>
+
+<!-- Hero (Operator Console 风格) -->
+<section class="hero">
+  <div class="hero-glow"></div>
+
+  <!-- 左侧：品牌叙事 -->
+  <div class="hero-left">
+    <!-- v1.20.4：左侧巨型渐变 M 水印（与登录页同步） -->
+    <div class="hero-watermark" aria-hidden="true">M</div>
+
+    <div class="hero-meta">
+      <span class="hero-tag">ENTERPRISE</span>
+      <span class="hero-tag hero-tag--muted">© 2026 MeetingOS</span>
+    </div>
+
+    <div class="hero-mark">
+      <div class="hero-mark-glow"></div>
+      <div class="hero-mark-ring"></div>
+      <div class="hero-mark-ring hero-mark-ring--delay"></div>
+      <svg class="hero-mark-svg" width="48" height="48" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="4" width="24" height="20" rx="4" stroke="currentColor" stroke-width="2" fill="none"/>
+        <path d="M9 12h10M9 16h7M14 8h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+      </svg>
+    </div>
+
+    <div class="hero-headline">
+      <span class="hero-eyebrow">OPERATOR CONSOLE</span>
+      <h1 class="hero-title">
+        让每一次<br/>
+        <span class="hero-title-em">会议都有回声</span>
+      </h1>
+      <p class="hero-subtitle">
+        统一存储 · 智能编译 · 跨公司隔离 · 时间轴追溯<br/>
+        为高密度协作而设计的<strong>会议纪要操作系统</strong>。
+      </p>
+    </div>
+
+    <div class="hero-status">
+      <span class="hero-status-dot"></span>
+      <span>ALL SYSTEMS · OPERATIONAL</span>
+    </div>
+
+    <!-- v1.20.4：装饰性刻度条（呼应登录页 hero-axis） -->
+    <div class="hero-axis" aria-hidden="true">
+      <span class="hero-axis-mark">M/01</span>
+      <span class="hero-axis-line"></span>
+      <span class="hero-axis-mark">2026/08</span>
+    </div>
+  </div>
+
+  <!-- 右侧：能力分点（与登录页完全一致） -->
+  <div class="hero-right">
+    <!-- v1.20.4：右侧 O 渐变光晕（与登录页同步，M ↔ O 视觉对仗） -->
+    <div class="orbit-glow" aria-hidden="true">
+      <div class="orbit-glow-core"></div>
+      <div class="orbit-glow-ring orbit-glow-ring--1"></div>
+      <div class="orbit-glow-ring orbit-glow-ring--2"></div>
+      <div class="orbit-glow-ring orbit-glow-ring--3"></div>
+    </div>
+
+    <div class="hero-section-label">
+      <span>FEATURE INDEX · 核心能力</span>
+    </div>
+
+    <div class="feat">
+      <div class="feat-index">01</div>
+      <div class="feat-body">
+        <div class="feat-title">智能编译</div>
+        <div class="feat-desc">LLM 自动提炼决策与待办</div>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-index">02</div>
+      <div class="feat-body">
+        <div class="feat-title">跨组织隔离</div>
+        <div class="feat-desc">完整 ABAC 权限模型 + 四级密级</div>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-index">03</div>
+      <div class="feat-body">
+        <div class="feat-title">时间轴追溯</div>
+        <div class="feat-desc">纵向时间轴一键回溯</div>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-index">04</div>
+      <div class="feat-body">
+        <div class="feat-title">待办多负责人</div>
+        <div class="feat-desc">待办状态机 + 原文位置定位</div>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-index">05</div>
+      <div class="feat-body">
+        <div class="feat-title">多 LLM 供应商</div>
+        <div class="feat-desc">DeepSeek · 智谱 · MiniMax · Kimi · 自定义</div>
+      </div>
+    </div>
+
+    <!-- v1.20.5：新增 Word 文档导出能力（v1.17.0 落地，v1.17.1 精简为仅 Word） -->
+    <div class="feat">
+      <div class="feat-index">06</div>
+      <div class="feat-body">
+        <div class="feat-title">Word 文档导出</div>
+        <div class="feat-desc">单会议 / 决策清单 / 待办清单 一键导出</div>
+      </div>
+    </div>
+    <!-- v1.21.0 新增：音频转写（核心新增功能） -->
+    <div class="feat">
+      <div class="feat-index">07</div>
+      <div class="feat-body">
+        <div class="feat-title">音频转写 ⭐</div>
+        <div class="feat-desc">音频文件自动转文字 + 说话人分离</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="section">
+  <div class="stats-row reveal">
+    <div class="stat-card">
+      <div class="stat-number">4+</div>
+      <div class="stat-label">预置 LLM 供应商</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">4</div>
+      <div class="stat-label">预置 Prompt 模板场景</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">4</div>
+      <div class="stat-label">用户角色层级</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">4</div>
+      <div class="stat-label">会议密级分类</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">3</div>
+      <div class="stat-label">分享安全模式</div>
+    </div>
+    <!-- v1.20.5：新增 Word 导出统计 -->
+    <div class="stat-card">
+      <div class="stat-number">3</div>
+      <div class="stat-label">Word 导出场景</div>
+    </div>
+    <!-- v1.21.0 新增：ASR 转写统计 -->
+    <div class="stat-card">
+      <div class="stat-number">3</div>
+      <div class="stat-label">预置 ASR 引擎</div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section" id="features">
+  <div class="section-header reveal">
+    <div class="section-label">核心能力</div>
+    <h2 class="section-title">不止于存储，<br>更懂提炼与追溯</h2>
+    <p class="section-desc">从上传到发布，从待办到追溯，每一个环节都为团队协作而设计。</p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        </svg>
+      </div>
+      <h3>LLM 智能编译</h3>
+      <p>上传原始会议记录后，自动调用 LLM 提取标题、摘要、决策、待办、参会人、标签等结构化信息。支持 4 种场景化 Prompt 模板，可自定义模板与模型。</p>
+      <div class="feature-tags">
+        <span class="feature-tag highlight">DeepSeek</span>
+        <span class="feature-tag highlight">智谱</span>
+        <span class="feature-tag highlight">MiniMax</span>
+        <span class="feature-tag highlight">Kimi</span>
+        <span class="feature-tag">自定义模板</span>
+      </div>
+    </div>
+
+    <div class="feature-card reveal">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+        </svg>
+      </div>
+      <h3>四级权限体系</h3>
+      <p>超级管理员、公司管理员、普通用户、只读用户四级角色，结合 ABAC 属性鉴权引擎，实现精细化的公司级数据隔离与操作权限控制。</p>
+      <div class="feature-tags">
+        <span class="feature-tag highlight">ABAC</span>
+        <span class="feature-tag highlight">多租户</span>
+        <span class="feature-tag">4 级角色</span>
+        <span class="feature-tag">4 级密级</span>
+      </div>
+    </div>
+
+    <div class="feature-card reveal">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+      </div>
+      <h3>待办追溯 ⭐</h3>
+      <p>每个待办事项携带原文上下文片段与位置索引，可一键跳转到会议原文对应位置并高亮显示。支持多负责人、状态流转、多维分组。</p>
+      <div class="feature-tags">
+        <span class="feature-tag highlight">核心亮点</span>
+        <span class="feature-tag">原文定位</span>
+        <span class="feature-tag">多负责人</span>
+        <span class="feature-tag">状态机</span>
+      </div>
+    </div>
+
+    <div class="feature-card reveal">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"/><polyline points="8 5 3 12 8 19"/>
+        </svg>
+      </div>
+      <h3>时间轴浏览</h3>
+      <p>纵向时间轴视图，支持年/月/日三档切换，右侧月度走势图一目了然。内置全文搜索与标签筛选，历史决策快速定位。</p>
+      <div class="feature-tags">
+        <span class="feature-tag">年/月/日视图</span>
+        <span class="feature-tag">走势图</span>
+        <span class="feature-tag">全文搜索</span>
+      </div>
+    </div>
+
+    <div class="feature-card reveal">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+      </div>
+      <h3>安全分享</h3>
+      <p>阅后即焚、限时访问、密码保护三种安全模式，分享链接 UUID 不可猜测，访问日志完整记录，分享者可随时撤销。</p>
+      <div class="feature-tags">
+        <span class="feature-tag highlight">阅后即焚</span>
+        <span class="feature-tag">限时访问</span>
+        <span class="feature-tag">密码保护</span>
+        <span class="feature-tag">访问日志</span>
+      </div>
+    </div>
+
+    <div class="feature-card reveal">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+          <line x1="12" y1="22.08" x2="12" y2="12"/>
+        </svg>
+      </div>
+      <h3>可视化备份管理</h3>
+      <p>类 Windows 任务计划的备份策略配置，支持每日/每周/每月自动备份，本地/远程/云存储多目标，一键恢复，无需懂 cron。</p>
+      <div class="feature-tags">
+        <span class="feature-tag">自动备份</span>
+        <span class="feature-tag">多目标</span>
+        <span class="feature-tag">一键恢复</span>
+      </div>
+    </div>
+
+    <!-- v1.20.5：新增 Word 文档导出能力卡（v1.17.0 落地 + v1.17.1 精简） -->
+    <div class="feature-card reveal">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+      </div>
+      <h3>Word 文档导出</h3>
+      <p>已发布会议一键导出为 Word 文档，支持单会议、决策清单、待办清单三种场景。基于 python-docx 原生构造，跨平台稳定，中文文件名兼容 RFC 5987 标准，权限按角色精细控制。</p>
+      <div class="feature-tags">
+        <span class="feature-tag highlight">单会议</span>
+        <span class="feature-tag highlight">决策清单</span>
+        <span class="feature-tag highlight">待办清单</span>
+        <span class="feature-tag">中文文件名</span>
+        <span class="feature-tag">权限控制</span>
+      </div>
+    </div>
+
+    <div class="feature-card reveal">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </div>
+      <h3>LLM 供应商管理</h3>
+      <p>支持 DeepSeek、智谱、MiniMax、Kimi 四大预置供应商及自定义 OpenAI 兼容接口。每个公司独立配置，模型级启用/禁用，一键测试连接。</p>
+      <div class="feature-tags">
+        <span class="feature-tag">供应商管理</span>
+        <span class="feature-tag">模型测试</span>
+        <span class="feature-tag">公司隔离</span>
+      </div>
+    </div>
+
+    <!-- v1.21.0 新增：音频转写（替换原"安全加固"卡位置，安全特性保留在 feature-detail-grid） -->
+    <div class="feature-card reveal">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
+          <path d="M19 10v2a7 7 0 01-14 0v-2"/>
+          <line x1="12" y1="19" x2="12" y2="23"/>
+          <line x1="8" y1="23" x2="16" y2="23"/>
+        </svg>
+      </div>
+      <h3>音频转写 ⭐</h3>
+      <p>上传会议录音，自动调用 ASR 网关转写为结构化文本（说话人 / 时间轴 / 段落），转写结果可手动编辑后直接进入 LLM 编译流。3 个预置 ASR 引擎（FunASR / SenseVoice / Qwen3-ASR），分片上传 5 路并发 + 3 次指数退避，4GB 大文件稳定传输。</p>
+      <div class="feature-tags">
+        <span class="feature-tag highlight">自动转写</span>
+        <span class="feature-tag highlight">说话人分离</span>
+        <span class="feature-tag highlight">结构化段落</span>
+        <span class="feature-tag">4GB 大文件</span>
+        <span class="feature-tag">3 引擎可切换</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Architecture -->
+<section class="section" id="architecture">
+  <div class="section-header reveal">
+    <div class="section-label">系统架构</div>
+    <h2 class="section-title">前后端分离 · 多供应商可配置</h2>
+    <p class="section-desc">五层经典架构，从左至右展示请求流向：浏览器 → 接入 → 后端服务 → 数据存储 → LLM 推理。</p>
+  </div>
+
+  <div class="arch-container reveal">
+    <div id="archChart"></div>
+  </div>
+</section>
+
+<!-- Tech Stack -->
+<section class="section" id="tech">
+  <div class="section-header reveal">
+    <div class="section-label">技术栈</div>
+    <h2 class="section-title">成熟稳定 · 生产验证</h2>
+    <p class="section-desc">基于现代 Web 技术栈构建，兼顾开发效率与运行性能。</p>
+  </div>
+
+  <div class="tech-grid reveal">
+    <div class="tech-card">
+      <div class="tech-name">Vue 3</div>
+      <div class="tech-cat">前端框架</div>
+      <div class="tech-ver">3.4+</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-name">TypeScript</div>
+      <div class="tech-cat">前端语言</div>
+      <div class="tech-ver">5.x</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-name">Vite</div>
+      <div class="tech-cat">构建工具</div>
+      <div class="tech-ver">5.x</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-name">Pinia</div>
+      <div class="tech-cat">状态管理</div>
+      <div class="tech-ver">2.x</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-name">FastAPI</div>
+      <div class="tech-cat">后端框架</div>
+      <div class="tech-ver">0.110+</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-name">Python</div>
+      <div class="tech-cat">后端语言</div>
+      <div class="tech-ver">3.11+</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-name">SQLAlchemy</div>
+      <div class="tech-cat">ORM</div>
+      <div class="tech-ver">2.0</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-name">PostgreSQL</div>
+      <div class="tech-cat">数据库</div>
+      <div class="tech-ver">15+</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-name">gunicorn</div>
+      <div class="tech-cat">部署</div>
+      <div class="tech-ver">4 workers</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-name">OpenAI SDK</div>
+      <div class="tech-cat">LLM 客户端</div>
+      <div class="tech-ver">兼容模式</div>
+    </div>
+    <!-- v1.21.0 新增：ASR 网关 -->
+    <div class="tech-card">
+      <div class="tech-name">ASR 网关</div>
+      <div class="tech-cat">语音转写</div>
+      <div class="tech-ver">3 引擎</div>
+    </div>
+    <!-- v1.21.0 新增：分片上传 -->
+    <div class="tech-card">
+      <div class="tech-name">分片上传</div>
+      <div class="tech-cat">大文件传输</div>
+      <div class="tech-ver">5 路并发</div>
+    </div>
+  </div>
+</section>
+
+<!-- Permission Model -->
+<section class="section" id="permission">
+  <div class="section-header reveal">
+    <div class="section-label">权限模型</div>
+    <h2 class="section-title">ABAC 四维鉴权引擎</h2>
+    <p class="section-desc">基于用户属性、资源属性、环境属性、操作属性的四维决策矩阵，实现精细化的企业级权限控制。</p>
+  </div>
+
+  <div class="permission-table-wrap reveal">
+    <table class="permission-table">
+      <thead>
+        <tr>
+          <th>操作 \ 角色</th>
+          <th>超级管理员</th>
+          <th>公司管理员</th>
+          <th>普通用户</th>
+          <th>只读用户</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="role-label">查看公开会议</td>
+          <td class="perm-yes">✓</td>
+          <td class="perm-yes">✓</td>
+          <td class="perm-yes">✓</td>
+          <td class="perm-yes">✓</td>
+        </tr>
+        <tr>
+          <td class="role-label">查看机密会议</td>
+          <td class="perm-yes">✓</td>
+          <td class="perm-yes">✓</td>
+          <td class="perm-yes">✓</td>
+          <td class="perm-no">—</td>
+        </tr>
+        <tr>
+          <td class="role-label">查看绝密会议</td>
+          <td class="perm-yes">✓</td>
+          <td class="perm-yes">✓</td>
+          <td class="perm-no">—</td>
+          <td class="perm-no">—</td>
+        </tr>
+        <tr>
+          <td class="role-label">上传 / 编译</td>
+          <td class="perm-yes">✓</td>
+          <td class="perm-yes">✓</td>
+          <td class="perm-yes">✓</td>
+          <td class="perm-no">—</td>
+        </tr>
+        <tr>
+          <td class="role-label">删除会议</td>
+          <td class="perm-yes">✓</td>
+          <td class="perm-yes">✓</td>
+          <td class="perm-no">—</td>
+          <td class="perm-no">—</td>
+        </tr>
+        <tr>
+          <td class="role-label">管理用户</td>
+          <td class="perm-yes">✓</td>
+          <td class="perm-cond">本公司</td>
+          <td class="perm-no">—</td>
+          <td class="perm-no">—</td>
+        </tr>
+        <tr>
+          <td class="role-label">跨公司访问</td>
+          <td class="perm-yes">✓</td>
+          <td class="perm-no">—</td>
+          <td class="perm-no">—</td>
+          <td class="perm-no">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Feature Details -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-label">细节面面俱到</div>
+    <h2 class="section-title">企业级特性全覆盖</h2>
+    <p class="section-desc">从密码强度到时区治理，从组件抽离到数据库迁移，每个细节都经过生产验证。</p>
+  </div>
+
+  <div class="feature-detail-grid reveal">
+    <div class="feature-detail-item">
+      <div class="feature-detail-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M2 12h20"/></svg>
+      </div>
+      <div class="feature-detail-content">
+        <h4>Prompt 模板管理</h4>
+        <p>通用 / 技术 / 产品 / 商务 4 种预置场景模板，支持自定义，系统预置模板可推送至公司。</p>
+      </div>
+    </div>
+    <div class="feature-detail-item">
+      <div class="feature-detail-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <div class="feature-detail-content">
+        <h4>工作台首页</h4>
+        <p>日历标记会议日期，右侧展示待办统计与会议概要，一眼掌握本周工作节奏。</p>
+      </div>
+    </div>
+    <div class="feature-detail-item">
+      <div class="feature-detail-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </div>
+      <div class="feature-detail-content">
+        <h4>全局搜索</h4>
+        <p>统一检索会议、待办与 Prompt 模板，快速定位所需信息。</p>
+      </div>
+    </div>
+    <div class="feature-detail-item">
+      <div class="feature-detail-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+      </div>
+      <div class="feature-detail-content">
+        <h4>密码强度与生成器</h4>
+        <p>强制 8-32 位含大小写字母和数字，一键生成强密码，实时强度提示。</p>
+      </div>
+    </div>
+    <div class="feature-detail-item">
+      <div class="feature-detail-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="feature-detail-content">
+        <h4>时区治理</h4>
+        <p>业务时区统一为 Asia/Shanghai，前后端时区规则一致，杜绝时间错位 8 小时问题。</p>
+      </div>
+    </div>
+    <div class="feature-detail-item">
+      <div class="feature-detail-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="feature-detail-content">
+        <h4>四级密级分类</h4>
+        <p>公开 / 内部 / 机密 / 绝密四级密级，结合 ABAC 鉴权控制不同角色的查看权限。</p>
+      </div>
+    </div>
+    <!-- v1.20.5：新增 Word 导出细节项 -->
+    <div class="feature-detail-item">
+      <div class="feature-detail-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div class="feature-detail-content">
+        <h4>Word 文档导出</h4>
+        <p>已发布会议、决策清单、待办清单三种场景一键导出 Word；python-docx 原生构造跨平台稳定，中文文件名兼容 RFC 5987。</p>
+      </div>
+    </div>
+    <!-- v1.21.0 新增：音频转写细节项 -->
+    <div class="feature-detail-item">
+      <div class="feature-detail-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg>
+      </div>
+      <div class="feature-detail-content">
+        <h4>音频转写</h4>
+        <p>音频文件自动转写为结构化文本：说话人分离 + 时间轴分段 + 段落文本。转写结果写入 Markdown 原文，复用现有 LLM 编译流（决策 / 待办 / 摘要）。支持 FunASR / SenseVoice / Qwen3-ASR 三引擎，分片上传 5 路并发 + 3 次指数退避，4GB 大文件稳定传输。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Milestones -->
+<section class="section" id="milestones">
+  <div class="section-header reveal">
+    <div class="section-label">版本历程</div>
+    <h2 class="section-title">持续迭代 · 精益求精</h2>
+    <p class="section-desc">从 v1.13.0 到 v1.21.x，每一次发布都离「好用的会议管理工具」更近一步。</p>
+  </div>
+
+  <div class="milestone-timeline reveal">
+    <!-- v1.21.x 补全：v1.21.0 ASR 主推 + v1.21.5~v1.21.12 关键修复 -->
+    <div class="milestone-item">
+      <div class="milestone-version">v1.21.x</div>
+      <h4>音频转写集成（ASR）+ 任务队列权限与分页</h4>
+      <p>v1.21.0 五批推进音频转写（ASR）集成，新增「音频转会议」数据源：上传录音 → 调用 asr-platform 统一网关 → 转写为结构化文本（说话人/时间轴/段落）→ 复用 LLM 编译流。3 个预置 ASR 引擎（FunASR / SenseVoice / Qwen3-ASR），分片上传 5 路并发 + 3 次指数退避。后续 12 个小版本持续打磨体验：v1.21.5 任务控制 + 标签对齐、v1.21.7 队列筛选冗余 + queueStats 统计失真修复、v1.21.9 智能轮询增强（替代 SSE 因安全考虑回退）、v1.21.10 类型错位修复 + 详情抽屉关闭按钮 + 转写状态不更新等 4 个端到端 bug、v1.21.11 任务队列权限收紧 + 分页 + 上传人标签、v1.21.12 普通成员 ASR 配置读取权限修复。</p>
+    </div>
+    <div class="milestone-item">
+      <div class="milestone-version">v1.20.x</div>
+      <h4>登录页 M↔O 视觉对仗 + 备份稳定性攻坚</h4>
+      <p>登录页引入巨型渐变 M 水印 + 同心圆 O 光晕背景，产品宣发页同步风格；备份功能 500 错误修复（Pydantic schema 必填约束错配）+ share_access_logs 表过滤策略错配修复 + 5 阶段步骤级日志 + 错误透传机制；备份策略管理重构（物理删除 + iOS 风格启用/禁用开关 + 自定义时间选择器）；第 3 次上线前安全审查（2 Critical + 18 Warning 系统性修复，ECIES 登录私钥轮换 + git 历史清理）。</p>
+    </div>
+    <div class="milestone-item">
+      <div class="milestone-version">v1.19.0</div>
+      <h4>异步恢复 + 选择性恢复</h4>
+      <p>恢复流程改用线程异步执行，前端轮询任务进度，永不超时；支持按内容类型（会议/待办/LLM 配置/Prompt 模板/用户/分享/上传文件/原始文件）选择性恢复，8 种内容类型复选框；移除"恢复前快照"高失败率步骤，恢复耗时从 5-15 分钟缩短到 1-3 分钟。</p>
+    </div>
+    <div class="milestone-item">
+      <div class="milestone-version">v1.18.3</div>
+      <h4>备份恢复多租户隔离</h4>
+      <p>备份和恢复按 company_id 隔离，A 公司备份不会泄露 B/C 公司数据；pg_dump 全库导出改为按表 + company_id 过滤；TRUNCATE 改为 DELETE 减少锁阻塞；4 张关联表（meeting_participants / todo_assignees / llm_models / share_access_logs）通过父表子查询过滤。</p>
+    </div>
+    <div class="milestone-item">
+      <div class="milestone-version">v1.17.1</div>
+      <h4>导出功能精简为仅 Word</h4>
+      <p>取消 PDF 导出（weasyprint 跨平台依赖不稳定），仅保留 Word 导出；export_service 从 770 行精简到 380 行；移除 markdown / weasyprint 依赖，保留 python-docx；中文文件名兼容 RFC 5987 标准（filename* UTF-8 编码）。</p>
+    </div>
+    <div class="milestone-item">
+      <div class="milestone-version">v1.17.0</div>
+      <h4>Word 文档导出落地（PRD F25）</h4>
+      <p>已发布会议一键导出 Word 文档，支持单会议 / 决策清单 / 待办清单三种场景；python-docx 原生构造（弃用 pandoc 方案）；数据源从 meeting.summary 改为编译产物（title/topic/attendees/summary/decisions/todos）；权限按角色精细控制（超管/公司管理员/上传者）。</p>
+    </div>
+    <div class="milestone-item">
+      <div class="milestone-version">v1.16.45</div>
+      <h4>组件抽离 + 包结构治理</h4>
+      <p>CompileDialog / ParticipantsDialog 组件抽离；数据库迁移动态反射；AwareDateTime 统一序列化；移除 sys.path.insert 副作用。</p>
+    </div>
+    <div class="milestone-item">
+      <div class="milestone-version">v1.16.43 - v1.16.44</div>
+      <h4>安全加固与上线前审查</h4>
+      <p>CORS 白名单收敛、JWT 密钥强制校验、登录失败持久化、slowapi 限流、ABAC fallback 改为 deny、破坏性迁移剥离运行时。修复 LLM 连通性测试阻塞主线程问题。</p>
+    </div>
+    <div class="milestone-item">
+      <div class="milestone-version">v1.16.32 - v1.16.36</div>
+      <h4>整体化时区治理</h4>
+      <p>统一 AwareDateTime 类型、AES-GCM 加密存储、ECIES 端到端加密登录。修复待办日期循环减 1 天、双冒号 bug、会议时间 +8h 错位等时区问题。</p>
+    </div>
+    <div class="milestone-item">
+      <div class="milestone-version">v1.16.8 - v1.16.39</div>
+      <h4>多负责人与会议编辑重构</h4>
+      <p>待办多负责人支持、MeetingEditorDialog 组件抽离、会议记录操作列编辑语义修正、待办卡片链接视觉强化、分享管理显示创建者姓名。</p>
+    </div>
+    <div class="milestone-item">
+      <div class="milestone-version">v1.13.0</div>
+      <h4>MVP 发布</h4>
+      <p>LLM 模型测试入口、密码强度校验与生成器、用户管理可用性修复、公司卡片计数。完成上传、编译、时间轴、待办追溯、分享、备份等核心功能。</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>准备好管理会议资产了吗？</h2>
+  <p>MeetingOS 让每一次会议的智慧得以沉淀、追溯与复用。</p>
+  <a href="mailto:sunlionmedtech@outlook.com" class="btn btn-primary">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    联系团队
+  </a>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>© 2026 MeetingOS · 企业级会议纪要智能管理平台</p>
+  <div style="display: flex; gap: 24px;">
+    <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+    <a href="mailto:sunlionmedtech@outlook.com">联系我们</a>
+  </div>
+</footer>
+
+<script>
+// ============================================
+// v1.20.4：左侧 M 水印鼠标视差（与登录页同步）
+// 设计逻辑：
+//   - 鼠标在 hero-left 内移动 → M 跟随轻移（±10px）
+//   - 鼠标离开 hero-left → 平滑归零（与 CSS keyframe 起点一致）
+//   - rAF 节流避免高频 mousemove 触发回流
+//   - pointer-events: none 确保不抢事件
+// ============================================
+;(function initHeroWatermarkParallax() {
+  const heroLeft = document.querySelector('.hero-left');
+  const watermark = document.querySelector('.hero-watermark');
+  if (!heroLeft || !watermark) return;
+
+  // 无障碍：用户偏好减少动效时禁用视差
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let rafId = null;
+  let isHovering = false;
+
+  function tick() {
+    // 线性插值，让位移平滑跟随
+    currentX += (targetX - currentX) * 0.12;
+    currentY += (targetY - currentY) * 0.12;
+
+    watermark.style.transform = `translate(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px)`;
+
+    // 接近目标且未在 hover 时停止 rAF（让 CSS keyframe 接管）
+    if (Math.abs(targetX - currentX) < 0.1 && Math.abs(targetY - currentY) < 0.1) {
+      if (!isHovering) {
+        // 归零后让 CSS 浮动动画接管
+        watermark.style.transform = '';
+        rafId = null;
+        return;
+      }
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+
+  heroLeft.addEventListener('mousemove', (e) => {
+    const rect = heroLeft.getBoundingClientRect();
+    // 鼠标相对中心的归一化坐标（-1 ~ 1）
+    const nx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+    const ny = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+    // 视差幅度 ±10px（克制，避免 M 晃动）
+    targetX = nx * 10;
+    targetY = ny * 10;
+    isHovering = true;
+    if (!rafId) {
+      // 进入 hover：暂停 CSS 浮动，让 JS 接管 transform
+      watermark.style.animationPlayState = 'paused';
+      rafId = requestAnimationFrame(tick);
+    }
+  });
+
+  heroLeft.addEventListener('mouseleave', () => {
+    isHovering = false;
+    targetX = 0;
+    targetY = 0;
+    // rAF tick 检测到 isHovering=false 且接近 0 时会清理 transform 并恢复 CSS 浮动
+  });
+})();
+
+// ============================================
+// ECharts 架构思维导图
+// ============================================
+;(function initArchChart() {
+  const chartDom = document.getElementById('archChart');
+  if (!chartDom) return;
+
+  const colors = {
+    primary: '#2dd4bf',
+    accent:   '#f59e0b',
+    text:     '#e2e8f0',
+    textSec:  '#94a3b8',
+    textMuted:'#64748b',
+    border:   '#1e293b',
+    card:     '#131c31',
+    elevated: '#1a2744',
+  };
+
+  const myChart = echarts.init(chartDom, null, { renderer: 'canvas' });
+
+  const data = {
+    name: 'MeetingOS',
+    symbolSize: 18,
+    itemStyle: { color: '#2dd4bf', borderColor: '#5eead4', borderWidth: 2 },
+    label: { fontSize: 14, fontWeight: 700, color: colors.text },
+    children: [
+      {
+        name: '前端层\nVue 3 SPA',
+        symbolSize: 12,
+        label: { fontWeight: 700, color: colors.text },
+        itemStyle: { color: colors.primary },
+        children: [
+          { name: '工作台首页', symbolSize: 7, itemStyle: { color: '#5eead4' } },
+          { name: '会议管理',   symbolSize: 7, itemStyle: { color: '#5eead4' } },
+          { name: '时间轴浏览', symbolSize: 7, itemStyle: { color: '#5eead4' } },
+          { name: '待办追溯',   symbolSize: 7, itemStyle: { color: '#5eead4' } },
+        ]
+      },
+      {
+        name: '接入层\nnginx',
+        symbolSize: 12,
+        label: { fontWeight: 700, color: colors.text },
+        itemStyle: { color: colors.accent },
+        children: [
+          { name: '/api/ → FastAPI :18800', symbolSize: 7, itemStyle: { color: '#fbbf24' } },
+          { name: '/spa/ → Vite :13003',    symbolSize: 7, itemStyle: { color: '#fbbf24' } },
+        ]
+      },
+      {
+        name: '后端服务层\nFastAPI · gunicorn',
+        symbolSize: 12,
+        label: { fontWeight: 700, color: colors.text },
+        itemStyle: { color: '#a78bfa' },
+        children: [
+          { name: '认证鉴权 · ABAC',     symbolSize: 7, itemStyle: { color: '#c4b5fd' } },
+          { name: '会议管理 · 编译服务', symbolSize: 7, itemStyle: { color: '#c4b5fd' } },
+          { name: '待办 · 时间轴',       symbolSize: 7, itemStyle: { color: '#c4b5fd' } },
+          { name: 'LLM 供应商 · Prompt', symbolSize: 7, itemStyle: { color: '#c4b5fd' } },
+          { name: '分享 · 备份',         symbolSize: 7, itemStyle: { color: '#c4b5fd' } },
+        ]
+      },
+      {
+        name: '数据层',
+        symbolSize: 12,
+        label: { fontWeight: 700, color: colors.text },
+        itemStyle: { color: '#f472b6' },
+        children: [
+          { name: 'PostgreSQL',           symbolSize: 7, itemStyle: { color: '#f9a8d4' } },
+          { name: '文件存储 /storage',     symbolSize: 7, itemStyle: { color: '#f9a8d4' } },
+        ]
+      },
+      {
+        name: 'LLM 推理层',
+        symbolSize: 12,
+        label: { fontWeight: 700, color: colors.text },
+        itemStyle: { color: '#34d399' },
+        children: [
+          { name: 'DeepSeek',  symbolSize: 7, itemStyle: { color: '#6ee7b7' } },
+          { name: '智谱',       symbolSize: 7, itemStyle: { color: '#6ee7b7' } },
+          { name: 'MiniMax',   symbolSize: 7, itemStyle: { color: '#6ee7b7' } },
+          { name: 'Kimi',      symbolSize: 7, itemStyle: { color: '#6ee7b7' } },
+          { name: '自定义',     symbolSize: 7, itemStyle: { color: '#6ee7b7' } },
+        ]
+      }
+    ]
+  };
+
+  const option = {
+    tooltip: {
+      trigger: 'item',
+      triggerOn: 'mousemove',
+      backgroundColor: 'rgba(15,23,42,0.95)',
+      borderColor: colors.border,
+      borderWidth: 1,
+      textStyle: { color: colors.text, fontSize: 12 },
+      formatter: function (params) {
+        return '<b>' + params.name.replace(/\n/g, '<br/>') + '</b>';
+      }
+    },
+    series: [{
+      type: 'tree',
+      data: [data],
+      top: 24,
+      bottom: 24,
+      left: 12,
+      right: 220,
+      symbolSize: 8,
+      orient: 'LR',
+      roam: false,
+      initialTreeDepth: 2,
+      expandAndCollapse: true,
+      nodeGap: 28,
+      subTreeGap: 36,
+      label: {
+        position: 'right',
+        offset: [10, 0],
+        fontFamily: "'Noto Sans SC', system-ui, sans-serif",
+        fontSize: 12,
+        fontWeight: 500,
+        color: colors.text,
+        lineHeight: 18,
+        verticalAlign: 'middle',
+        align: 'left',
+      },
+      leaves: {
+        label: {
+          position: 'right',
+          offset: [10, 0],
+          fontSize: 12,
+          color: colors.textSec,
+          verticalAlign: 'middle',
+          align: 'left',
+        }
+      },
+      lineStyle: {
+        color: colors.border,
+        width: 1.5,
+        curveness: 0.4,
+      },
+      itemStyle: {
+        borderColor: 'transparent',
+      },
+      emphasis: {
+        focus: 'descendant',
+        lineStyle: {
+          color: colors.primary,
+          width: 2,
+        }
+      },
+      animationDuration: 800,
+      animationEasing: 'cubicOut',
+    }]
+  };
+
+  myChart.setOption(option);
+
+  // Resize handler
+  const resize = function () {
+    const parent = chartDom.parentElement;
+    if (parent) {
+      const h = window.innerWidth < 768 ? 640 : 760;
+      chartDom.style.height = h + 'px';
+    }
+    myChart.resize();
+  };
+  window.addEventListener('resize', resize);
+  setTimeout(resize, 100);
+})();
+
+// ============================================
+// Scroll reveal
+// ============================================
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Smooth scroll for nav links
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
